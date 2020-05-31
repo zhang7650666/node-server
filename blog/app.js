@@ -40,6 +40,19 @@ const serverHandle = (req, res) => {
     // 设置请求格式
     res.setHeader('Content-type', 'application/json');
 
+    // 解析cookie
+    req.cookie = {};
+    const cookieStr = req.headers.cookie || '';
+    cookieStr.split(';').forEach((item) => {
+        if(!item) {
+            return;
+        };
+        const [key, val] = item.split('=');
+        req.cookie[key] = val;
+    });
+
+    console.log('cookie', req.cookie);
+
     getPostData(req, res).then((reqData) => {
         req.body = reqData;
         // 博客相关
