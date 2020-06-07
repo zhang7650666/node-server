@@ -1,5 +1,6 @@
 
 const {exec} = require('../db/mysql');
+const xss = require('xss');
 
 let sql = '';
 
@@ -29,7 +30,7 @@ const getDetail = (id) => {
 // 创建博客
 const newBlog = (blogData = {}) => {
     const {title, content, author} = blogData;
-    sql = `insert into blogs (title, content, author, createtime) values ('${title}', '${content}', '${author}', ${Date.now()}) `
+    sql = `insert into blogs (title, content, author, createtime) values ('${xss(title)}', '${content}', '${author}', ${Date.now()}) `
     return exec(sql).then((insertData) => {
         return {
             id: insertData.insertId,

@@ -4,6 +4,8 @@ const querystring = require("querystring");
 
 const {set, get} = require('./src/db/redis');
 
+const {access} = require('./utils/log');
+
 // 定义session 数据
 const SESSION_DATA = {};
 
@@ -47,6 +49,13 @@ const getPostData = (req, res) => {
 // 用来处理get 相关的数据请求
 const serverHandle = (req, res) => {
     if(req.url == '/favicon.ico') return;
+
+
+    // 写入日志
+    access(`
+        ${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}
+    `)
+
     let [path, query] = req.url.split('?')
     req.path = path;
     req.query = querystring.parse(query);

@@ -2,16 +2,15 @@ const {userLogin} = require('../controller/user');
 const {SuccModel, ErrorModel} = require('../model/resModel');
 const {set} = require('../db/redis');
 
-
-
 const handleUserRouter = (req, res) => {
     if(req.method == 'POST' && req.path == '/api/user/login'){
         const {username, password} = req.body;
         // const {username, password} = req.query;
         const result = userLogin(username, password);
         // 操作cookie
-        
+        console.log('username111', username)
         return result.then((data) => {
+            console.log('data', data.username)
             if (data.username == username) {
                 req.session.username = data.username;
                 req.session.realname = data.realname;
